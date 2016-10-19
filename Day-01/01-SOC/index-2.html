@@ -38,21 +38,22 @@
 				if (_state[attrName] === value) return;
 				_state[attrName] = value;
 				//trigger change notification for attrName
-				var subscriptionFn = _subscribers[attrName];
-				if (typeof subscriptionFn === 'function')
-					subscriptionFn();
+				var subscriptionFns = _subscribers[attrName];
+				subscriptionFns.forEach(function(subscriptionFn){
+					subscriptionFn(value)
+				});
 			};
 
 			var _subscribers = {
-				basic : null,
-				hra : null,
-				da : null,
-				tax : null,
-				salary : null	
+				basic : [],
+				hra : [],
+				da : [],
+				tax : [],
+				salary : []	
 			};
 
 			this.watch = function(attrName, subscriptionFn){
-				_subscribers[attrName] = subscriptionFn;
+				_subscribers[attrName].push(subscriptionFn);
 			}
 		}
 		SalaryCalculator.prototype.calculate = function(){
@@ -84,21 +85,21 @@
 			});
 			
 			//React to Model changes
-			calculator.watch('salary', function(){
-				$("#divResult").html(calculator.get('salary'));
+			calculator.watch('salary', function(value){
+				$("#divResult").html(value);
 			});
-			calculator.watch('basic',function(){
-				$("#txtBasic").val(calculator.get('basic'));
+			calculator.watch('basic',function(value){
+				$("#txtBasic").val(value);
 			});
-			calculator.watch('hra',function(){
-				$("#txtHra").val(calculator.get('hra'));
+			calculator.watch('hra',function(value){
+				$("#txtHra").val(value);
 			});
-			calculator.watch('da',function(){
-				$("#txtDa").val(calculator.get('da'));
+			calculator.watch('da',function(value){
+				$("#txtDa").val(value);
 			});
-			calculator.watch('tax',function(){
-				$("#rangeTax").val(calculator.get('tax'));
-				$("#spanTax").html(calculator.get('tax'));
+			calculator.watch('tax',function(value){
+				$("#rangeTax").val(value);
+				$("#spanTax").html(value);
 			});
 		});
 
