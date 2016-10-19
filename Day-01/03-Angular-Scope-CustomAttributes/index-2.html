@@ -37,16 +37,8 @@
 			this.salary = net;
 		}
 
-		angular.injector(["ng"]).invoke(function($rootScope){
-			window.scope = $rootScope;
-		});
-
-		//View
-		$(function(){
-			window.calculator = scope.calculator = new SalaryCalculator();
-
-			//React to User actions
-			function bindTwoWay($control, model){
+		function compile(root){
+			function bindTwoWay($control, model, scope){
 				$control.change(function(evt){
 					scope.$apply(function(){
 						var expr = model + ' = ' + evt.target.value.toInt();
@@ -58,7 +50,7 @@
 				});
 			}
 
-			function bindClick($control, expr){
+			function bindClick($control, expr, scope){
 				$control.click(function(){
 					scope.$apply(function(){
 						scope.$eval(expr);
@@ -66,44 +58,47 @@
 				});
 			}
 
-			function bindOneWay($control, model){
+			function bindOneWay($control, model, scope){
 				scope.$watch(model, function(newValue, oldValue){
 					$control.html(newValue);
 				});
 			}
 
-			/*bindTwoWay($("#txtBasic"), "calculator.basic");
-			bindTwoWay($("#txtHra"), "calculator.hra");
-			bindTwoWay($("#txtDa"), "calculator.da");
-			bindTwoWay($("#rangeTax"), "calculator.tax");*/
+			
+			return function link(scope){
+				$("*[app-model]", root).each(function(index, control){
+					var $control = $(control),
+						model = $control.attr("app-model");
+					bindTwoWay($control, model, scope);
+				});
+				
+				$("*[app-click]", root).each(function(index, control){
+					var $control = $(control),
+						expr = $control.attr("app-click");
+					bindClick($control, expr, scope);
+				});
+				
+				$("*[app-bind]", root).each(function(index, control){
+					var $control = $(control),
+						model = $control.attr("app-bind");
+					bindOneWay($control, model, scope);
+				});
+			}
+		}
+			
 
-			$("*[app-model]").each(function(index, control){
-				var $control = $(control),
-					model = $control.attr("app-model");
-				bindTwoWay($control, model)
-			});
+		
 
-			//bindClick($("#btnCalculate"), "calculator.calculate()")
-
-			$("*[app-click]").each(function(index, control){
-				var $control = $(control),
-					expr = $control.attr("app-click");
-				bindClick($control, expr);
+		//View
+		$(function(){
+			angular.injector(["ng"]).invoke(function($rootScope){
+				window.scope = $rootScope;
+				window.calculator = scope.calculator = new SalaryCalculator();
+				var link = compile(document.body);
+				link(window.scope);
 			});
 			
 
-
-			/*
-			bindOneWay($("#divResult"), "calculator.salary");
-			bindOneWay($("#spanTax"), "calculator.tax");
-			*/
-			
-			$("*[app-bind]").each(function(index, control){
-				var $control = $(control),
-					model = $control.attr("app-bind");
-				bindOneWay($control, model)
-			});
-			
 		});
 
 	</script>
