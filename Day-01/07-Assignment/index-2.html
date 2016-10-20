@@ -36,10 +36,16 @@
 		});
 
 		myApp.controller("mathCalculatorController2", function($scope){
+			var operatorLookup = {
+				'+' : 'add',
+				'-' : 'subtract',
+				'*' : 'multiply',
+				'/' : 'divide'
+			}
 			$scope.calculator = new MathCalculator();
-
-			$scope.calculate = function(op){
-				$scope.calculator[op]();
+			$scope.operation = null;
+			$scope.calculate = function(){
+				$scope.calculator[operatorLookup[$scope.operation]]();
 			}
 		})
 	</script>
@@ -54,20 +60,21 @@
 		<input type="button" value="Subtract" ng-click="calculator.subtract()">
 		<input type="button" value="Multiply" ng-click="calculator.multiply()">
 		<input type="button" value="Divide" ng-click="calculator.divide()">
-		<div id="divResult">{{calculator.result}}</div>
+		<div id="divResult" ng-bind="calculator.result">[Result]</div>
 	</div>
 	<hr>
 	<div class="content" ng-controller="mathCalculatorController2">
 		<input type="number" ng-model="calculator.number1">
-		<select ng-model="operation" ng-change="calculate(operation)">
-			<option value="add">Add</option>
-			<option value="subtract">Subtract</option>
-			<option value="multiply">Multiply</option>
-			<option value="divide">Divide</option>
+		<select ng-model="operation" ng-change="calculate()">
+			<option value="+">Add</option>
+			<option value="-">Subtract</option>
+			<option value="*">Multiply</option>
+			<option value="/">Divide</option>
 		</select>
+		<span ng-bind="operation"></span>
 		<input type="number" ng-model="calculator.number2">
-		<input type="button" value="Calculate" ng-click="calculate(operation)">
-		<div id="divResult">{{calculator.result}}</div>
+		<input type="button" value="Calculate" ng-click="calculate()">
+		<div id="divResult" ng-bind="calculator.result"></div>
 	</div>
 	
 </body>
