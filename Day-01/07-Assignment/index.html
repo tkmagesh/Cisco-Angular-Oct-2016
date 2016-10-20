@@ -27,6 +27,9 @@
 		MathCalculator.prototype.divide = function(){
 			this.result = this.number1 / this.number2;
 		}
+	</script>
+	<script>
+		
 		var myApp = angular.module("calculatorApp", []);
 		myApp.controller("mathCalculatorController", function($scope){
 			$scope.calculator = new MathCalculator();
@@ -45,5 +48,19 @@
 		<input type="button" value="Divide" ng-click="calculator.divide()">
 		<div id="divResult" ng-bind="calculator.result">[Result]</div>
 	</div>
+	<hr>
+	<div class="content">
+		<input type="number">
+		<select>
+			<option value="add">Add</option>
+			<option value="subtract">Subtract</option>
+			<option value="multiply">Multiply</option>
+			<option value="divide">Divide</option>
+		</select>
+		<input type="number">
+		<input type="button" value="Calculate">
+		<div id="divResult"></div>
+	</div>
+	
 </body>
 </html>
