@@ -1,0 +1,38 @@
+{
+  "bugs": [
+    {
+      "id": 3,
+      "name": "Server communication failure",
+      "isClosed": false,
+      "createdAt": "2016-09-09T06:38:33.530Z"
+    },
+    {
+      "id": 4,
+      "name": "Unable to order lunch",
+      "isClosed": true,
+      "createdAt": "2016-09-25T06:22:41.852Z"
+    },
+    {
+      "id": 5,
+      "name": "sadfasf sdaf dasf as",
+      "isClosed": true,
+      "createdAt": "2016-10-21T09:26:27.919Z"
+    },
+    {
+      "id": 6,
+      "name": "Testing bug",
+      "isClosed": false,
+      "createdAt": "2016-10-21T09:32:31.830Z"
+    }
+  ],
+  "employees": [
+    {
+      "id": 1,
+      "name": "Magesh"
+    },
+    {
+      "id": 2,
+      "name": "Suresh"
+    }
+  ]
+}
