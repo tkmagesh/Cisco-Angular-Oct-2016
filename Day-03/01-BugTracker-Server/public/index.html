@@ -94,59 +94,35 @@
 			}
 		});
 
-		bugTrackerApp.factory("bugStorage", function(bugOperations){
-			var currentBugId = 0;
-			var storage = window.localStorage;
+		
 
-			function addNewBug(bugName){
-				var newBug = bugOperations.createNew(++currentBugId, bugName);
-				saveBug(newBug);
-				return newBug;
-			}
 
-			function saveBug(bug){
-				storage.setItem(bug.id, angular.toJson(bug));
-			}
+		bugTrackerApp.controller("bugsController", function($scope, $http, bugOperations){
+			
+			$scope.bugs = [];
 
-			function getAllBugs(){
-				var result = [];
-				for(var i=0; i < storage.length; i++){
-					var data = storage.getItem(storage.key(i))
-					var bug = angular.fromJson(data);
-					currentBugId = bug.id > currentBugId ? bug.id : currentBugId;
-					result.push(bug);
-				}
-				return result;
-			}
-			function toggleBug(bug){
-				bugOperations.toggle(bug);
-				saveBug(bug);
-			}
-			function removeBug(bug){
-				return storage.removeItem(bug.id);
-			}
-			return {
-				addNew : addNewBug,
-				getAll : getAllBugs,
-				toggle : toggleBug,
-				remove : removeBug
-			};
-		});
-
-		bugTrackerApp.controller("bugsController", function($scope, bugStorage){
-			$scope.bugs = bugStorage.getAll();
+			var promiseGet = $http.get('http://localhost:3000/bugs');
+			promiseGet.then(function(response){
+				$scope.bugs = response.data;
+			});
 
 			$scope.addNew = function(bugName){
-				var newBug = bugStorage.addNew(bugName);
-				$scope.bugs.push(newBug);
+				var newBug = bugOperations.createNew(0, bugName);
+				$http
+					.post('http://localhost:3000/bugs', newBug)
+					.then(function(response){
+						$scope.bugs.push(response.data);		
+					});
+				
 			};
 			$scope.toggle = function(bug){
-				bugStorage.toggle(bug);
+				bugOperations.toggle(bug);
+				$http.put('http://localhost:3000/bugs/' + bug.id, bug)
 			};
 			$scope.removeClosed = function(){
 				for(var i=$scope.bugs.length-1; i>=0; i--)
 					if ($scope.bugs[i].isClosed){
-						bugStorage.remove($scope.bugs[i]);
+						$http.delete('http://localhost:3000/bugs/' + $scope.bugs[i].id);
 						$scope.bugs.splice(i,1);
 					}
 			};
@@ -155,33 +131,6 @@
 			
 		});
 		
-
-		/*bugTrackerApp.filter('toClosedCount', function(){
-			return function(bugs){
-				var result = 0;
-				for(var i=0; i<bugs.length; i++)
-					if (bugs[i].isClosed)
-						++result;
-				return result;
-			}
-		})*/
-
-		/*bugTrackerApp.filter('toClosedCount', function($filter){
-			var builtInFilter = $filter('filter');
-			return function(bugs){
-				return builtInFilter(bugs, {isClosed : true}).length;
-			}
-		});*/
-
-		/*bugTrackerApp.filter('toClosedCount', function(){
-			
-			return function(bugs){
-				return bugs.filter(function(bug){
-					return bug.isClosed;
-				}).length;
-			}
-		});*/
-
 		bugTrackerApp.filter('toClosedCount', function(){
 			
 			return function(bugs){
