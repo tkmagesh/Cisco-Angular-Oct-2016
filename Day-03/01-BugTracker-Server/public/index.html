@@ -95,17 +95,30 @@
 		});
 
 		
+		bugTrackerApp.factory('bugService', function($http){
 
+			function getAllBugs(){
+				var promiseGet = $http.get('http://localhost:3000/bugs');
+				var resultPromise = promiseGet.then(function(response){
+					return response.data;
+				});
 
-		bugTrackerApp.controller("bugsController", function($scope, $http, bugOperations){
+			}
+			return {
+				getAll : getAllBugs
+			}
+		})
+
+		bugTrackerApp.controller("bugsController", function($scope, $http, bugOperations, bugService){
 			
 			$scope.bugs = [];
 
-			var promiseGet = $http.get('http://localhost:3000/bugs');
-			promiseGet.then(function(response){
-				$scope.bugs = response.data;
-			});
-
+			bugService
+				.getAll()
+				.then(function(bugs){
+					$scope.bugs = bugs;
+				});
+			
 			$scope.addNew = function(bugName){
 				var newBug = bugOperations.createNew(0, bugName);
 				$http
