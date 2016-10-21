@@ -24,15 +24,9 @@
 		</section>
 		<section class="list">
 			<ol>
-				<li ng-repeat="bug in (bugs | filter:searchBug | orderBy:sortBy:sortOrder)">
-					<span 
-						class="bugname" ng-click="toggle(bug)"
-						ng-class="{closed : bug.isClosed}"
-						title = "{{bug.name}}"
-						>{{bug.name | trimText}}</span>
-					<div>{{bug.createdAt | elapsed}}</div>
-					<a href="/#/bugs/{{bug.id}}">More..</a>
-				</li>
+				<bug-item data = "bug" ng-repeat="bug in (bugs | filter:searchBug | orderBy:sortBy:sortOrder)" toggle="toggle(bug)">
+					
+				</bug-item>
 			</ol>
 			<input type="button" value="Remove Closed" ng-click="removeClosed()">
 		</section>

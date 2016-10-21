@@ -75,7 +75,29 @@
 
 
 		var bugTrackerApp = angular.module("bugTrackerApp", ["utils", "ngRoute"]);
+		bugTrackerApp.directive('bugItem', function(){
+			return {
+				restrict : 'E',
+				template : `
+					<li>
+					<span 
+						class="bugname" ng-click="toggle(data)"
+						ng-class="{closed : data.isClosed}"
+						title = "{{data.name}}"
+						>{{data.name | trimText}}</span>
+					<div>{{data.createdAt | elapsed}}</div>
+					<a href="/#/bugs/{{data.id}}">More..</a>
+					</li>
+				`,
+				scope : {
+					data : '=',
+					toggle : '&'
+				},
+				link : function($scope, $element, $attr){
 
+				}
+			}
+		})
 		bugTrackerApp.config(function($routeProvider){
 			$routeProvider
 				.when('/list', {

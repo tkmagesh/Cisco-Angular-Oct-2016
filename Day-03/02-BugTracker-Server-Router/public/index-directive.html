@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Directives</title>
+	<script src="angular.js"></script>
+	<script>
+		angular
+			.module("myApp", [])
+			.controller('testController', function($scope){
+				$scope.msg = '[controller] I have been clicked'
+				$scope.testAction = function(){
+					alert('action message received from the directive');
+				}
+			})
+			/*.directive('test', function(){
+				return function($scope, $element, $attr){
+					$element.bind('click', function(){
+						console.log($element.html());
+						$element.html($scope.message);
+					});
+				}
+			})*/
+			.directive('test', function(){
+				return {
+					restrict : 'EA',
+					scope : {
+						message : '=',
+						action : '&'
+					},
+					link : function($scope, $element, $attr){
+							$element.bind('click', function(){
+								$scope.$apply(function(){
+									console.log($element.html());
+									$element.html($scope.message);
+									$scope.message = '';
+									$scope.action();
+								});
+							});
+					}
+				};
+			})
+	</script>
+</head>
+<body ng-app="myApp">
+	<div ng-controller="testController">
+		<div>
+			[controller] - {{msg}}
+		</div>
+		<test message='msg' action="testAction()">Click Me</test>
+	</div>
+</body>
+</html>
