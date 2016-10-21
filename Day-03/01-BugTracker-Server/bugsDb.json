@@ -1,0 +1,32 @@
+{
+  "bugs": [
+    {
+      "id": 1,
+      "name": "message not displayed when needed",
+      "isClosed": false,
+      "createdAt": "2016-08-03T06:37:19.902Z"
+    },
+    {
+      "id": 3,
+      "name": "Server communication failure",
+      "isClosed": false,
+      "createdAt": "2016-09-09T06:38:33.530Z"
+    },
+    {
+      "id": 4,
+      "name": "Unable to order lunch",
+      "isClosed": false,
+      "createdAt": "2016-09-25T06:22:41.852Z"
+    }
+  ],
+  "employees": [
+    {
+      "id": 1,
+      "name": "Magesh"
+    },
+    {
+      "id": 2,
+      "name": "Suresh"
+    }
+  ]
+}
