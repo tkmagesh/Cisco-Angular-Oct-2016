@@ -66,6 +66,7 @@
 
 	</style>
 	<script src="angular.js"></script>
+	<script src="moment.js"></script>
 	<script>
 		var bugTrackerApp = angular.module("bugTrackerApp", []);
 
@@ -78,7 +79,8 @@
 					return {
 						id : id,
 						name : bugName || defaultBugName,
-						isClosed : false
+						isClosed : false,
+						createdAt : new Date()
 					}
 				},
 				toggle : function(bug){
@@ -144,6 +146,9 @@
 					}
 			};
 
+			$scope.toMoment = function(data){
+				return moment(data).fromNow();
+			}
 			
 		});
 		bugTrackerApp.value('defaultTrimLength', 40);
@@ -233,7 +238,7 @@
 						ng-class="{closed : bug.isClosed}"
 						title = "{{bug.name}}"
 						>{{bug.name | trimText}}</span>
-					<div>{{bug.createdAt}}</div>
+					<div>{{toMoment(bug.createdAt)}}</div>
 				</li>
 			</ol>
 			<input type="button" value="Remove Closed" ng-click="removeClosed()">
